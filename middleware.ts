@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     const token = request.cookies.get('admin_token')?.value;
 
     // Belirlediğin gizli giriş anahtarı (Bunu istediğin bir şey yapabilirsin)
-    const GIZLI_ANAHTAR = "R27r042018"; 
+    const GIZLI_ANAHTAR = process.env.ADMIN_SECRET_KEY; 
 
     // Eğer anahtar yoksa veya yanlışsa, admin paneline girmesine izin verme!
     if (!token || token !== GIZLI_ANAHTAR) {
