@@ -35,7 +35,6 @@ export default function AdminDashboard() {
   const totalPages = 20;
 
   useEffect(() => {
-    // Firebase Giriş Kontrolü
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser && currentUser.email === "umitkoyun275@gmail.com") {
         setUser(currentUser);
@@ -68,10 +67,6 @@ export default function AdminDashboard() {
       }
     }
   }, [user]);
-
-  const handlePageChange = (pageNumber: number) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) setCurrentPage(pageNumber);
-  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -112,16 +107,29 @@ export default function AdminDashboard() {
 
       {activeTab === "matches" && (
         <div className="bg-white rounded-2xl border border-slate-100 p-4">
-          <table className="w-full text-left text-xs text-slate-600">
-            {/* Tablo içeriğin burada kalıyor */}
-            <tbody>{matches.map(m => <tr key={m.id}><td>{m.homeTeam} vs {m.awayTeam}</td></tr>)}</tbody>
+          <table className="w-full text-left text-xs">
+            <thead><tr className="text-slate-400"><th>MAÇ</th></tr></thead>
+            <tbody>{matches.map(m => <tr key={m.id} className="border-t"><td>{m.homeTeam} vs {m.awayTeam}</td></tr>)}</tbody>
           </table>
         </div>
       )}
 
       {activeTab === "leaderboard" && (
-        <div className="bg-white rounded-2xl border border-slate-100 p-4">
-          {/* Sıralama tablosu içeriğin burada kalıyor */}
+        <div className="bg-white rounded-2xl border border-slate-100 p-4 overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 text-slate-400 uppercase">
+              <tr><th className="p-2">SIRA</th><th className="p-2">KULLANICI</th><th className="p-2">PUAN</th></tr>
+            </thead>
+            <tbody>
+              {currentUsers.map(user => (
+                <tr key={user.rank} className="border-t">
+                  <td className="p-2 font-bold text-slate-800">#{user.rank}</td>
+                  <td className="p-2">{user.username}</td>
+                  <td className="p-2 text-amber-600 font-bold">{user.totalPoints} Pts</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
